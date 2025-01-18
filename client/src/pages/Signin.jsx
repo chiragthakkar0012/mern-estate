@@ -20,10 +20,20 @@ setFormData({
     if(error){dispatch(restart());}
     
   }
-  
+  const validateForm=()=>
+  {
+    const emailRegx=/^[a-zA-Z0-9_+&%]+@gmail\.com$/;
+    if(!emailRegx.test(formData.email))
+    {
+      dispatch(signInFailure('Email is Required'));
+      return false
+    }
+    return true;
+  }
 const handleSubmit=async (e)=>
 {
   e.preventDefault();
+  if(!validateForm())return;
   try 
   {
    dispatch(signinStart());

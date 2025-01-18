@@ -18,9 +18,30 @@ setFormData({
       if(error){setError(null)}
       
     }
+    const validateForm=()=>
+    {
+      const emailRegex=/^[a-zA-Z0-9_+%&]+@gmail\.com$/;
+      if(!formData.username){
+        setError('UserName is Required');
+        return false;
+      }
+      
+      if(!emailRegex.test(formData.email))
+      {
+        setError('Email is Required');
+        return false;
+      }
+      if((formData.password).length<6)
+      {
+        setError('Password length greater than 6  is Required');
+        return false;
+      }
+      return true;
+    }
 const handleSubmit=async (e)=>
 {
   e.preventDefault();
+  if(!validateForm())return;
   try 
   {
     setLoading(true);

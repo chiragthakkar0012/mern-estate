@@ -1,4 +1,5 @@
 import {body,validationResult} from 'express-validator';
+import User from '../models/user.model.js'
 export const signupMiddleHandler=[
     //validation for username
     body('username')
@@ -8,7 +9,16 @@ export const signupMiddleHandler=[
     //valoidation for email 
     body('email')
     .isEmail().withMessage('Email is required')
-    .normalizeEmail(),
+    .normalizeEmail()
+    .custom(async(value)=>
+    {
+        const existingUser=await User.findOne({email:value});
+        if(existingUser)
+        {
+        throw new Error("Email alredy exist");
+        }
+        return true;
+    }),
 
     //validatiton for password
     body('password')

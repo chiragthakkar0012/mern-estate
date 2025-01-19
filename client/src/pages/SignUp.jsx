@@ -1,11 +1,17 @@
 import React, { useState } from 'react'
 import {Link,useNavigate} from 'react-router-dom';
 import OAuth from '../components/OAuth';
+import { FaEye ,FaEyeSlash} from "react-icons/fa";
 export default function SignUp() {
   const [formData,setFormData]=useState({})
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState(null);
+  const [password,setpassword]=useState(true);
   const navigate=useNavigate();
+  const handlePassword=(e)=>
+  {
+    setpassword(!password);
+  }
   const handleChange=(e)=>
   {
 setFormData({
@@ -81,7 +87,13 @@ const handleSubmit=async (e)=>
       <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
         <input type='text' placeholder='UserName' className='border p-3 rounded-lg' id='username' onChange={handleChange} onFocus={handleFocus}/>
         <input type='text' placeholder='Email' className='border p-3 rounded-lg' id='email' onChange={handleChange} onFocus={handleFocus}/>
-        <input type='password' placeholder='Password' className='border p-3 rounded-lg' id='password' onChange={handleChange} onFocus={handleFocus}/>
+        <div className='relative max-w-lg flex'>
+        <input type={password?'password':'text'} placeholder='Password' className='border p-3 rounded-lg flex-grow' id='password' onChange={handleChange} onFocus={handleFocus}/>
+        {
+          password ? <FaEyeSlash className='absolute top-4 right-2 cursor-pointer' onClick={handlePassword} />:<FaEye  className='absolute top-4 right-2 cursor-pointer' onClick={handlePassword}/>
+        }
+        </div>
+       
         <button disabled={loading} className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>{loading ?'..loading':'Sign Up'}</button>
         <OAuth/>
       </form>

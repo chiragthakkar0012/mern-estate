@@ -1,7 +1,9 @@
 import User from '../models/user.model.js'
 import bcryptjs from 'bcryptjs'
+import fs from 'fs';
 import { errHandler } from '../utils/error.js';
 import jwt from 'jsonwebtoken';
+import cloundinary from '../utils/cloundinary.js'
 import {emailSender}  from '../utils/emailtransporter.js';
 export const signup= async(req,res,next)=>
 {
@@ -79,3 +81,44 @@ export const google=async (req,res,next)=>
       next(err)
     }
 }
+
+export const imgUploader=async(req,res,next)=>
+  {
+    if(!req.file)
+    {
+      return res.json({message:'Error uploading Image',success:false})
+    }
+    try
+    {
+      const file=req.file.path;
+      const uploadResponse=await cloundinary.uploader.upload(file,{
+        folder:'mern_user_images',
+        public_id:`profile_pic${Date.now()}`,
+        resource_type:'auto',
+      });
+      fs.unlink(file,(err)=>
+      {
+        if(err)
+        {
+          console.error('Error deleting the file:', err);
+        }
+        else {
+          console.log('File deleted successfully');
+        }
+      })
+      console.log(uploadResponse);
+      res.status(200).json(
+        {
+          message:'Image uploaded successfully',
+          image_url:uploadResponse.url,
+          success:true
+        }
+      )
+
+    }
+    catch(error)
+    {
+      console.error('Error uploading to Cloudinary:', error);
+      res.status(500).json({ error: 'Failed to upload image to Cloudinary',success:false });
+    }
+  } 

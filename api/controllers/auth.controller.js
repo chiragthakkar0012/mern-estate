@@ -58,7 +58,8 @@ export const google=async (req,res,next)=>
             {
               const token=jwt.sign({id:user._id},process.env.JWT_SECRET);
               const{password:pass,...rest}=user._doc;
-              res.cookie('acces_token',token,{httpOnly:true}).status(200).json(rest);
+              console.log(token);
+              res.cookie('access_token',token,{httpOnly:true}).status(200).json(rest);
               await emailSender(user.email,user.username); 
             }
             else
@@ -69,7 +70,7 @@ export const google=async (req,res,next)=>
               await newuser.save();
               const token=jwt.sign({id:newuser._id},process.env.JWT_SECRET);
               const{password:pass,...rest}=newuser._doc;
-              res.cookie('acces_token',token,{httpOnly:true}).status(200).json(rest)
+              res.cookie('access_token',token,{httpOnly:true}).status(200).json(rest)
               await emailSender(newuser.email,newuser.username);
 
            
@@ -94,7 +95,7 @@ export const imgUploader=async(req,res,next)=>
       const uploadResponse=await cloundinary.uploader.upload(file,{
         folder:'mern_user_images',
         public_id:`profile_pic${Date.now()}`,
-        resource_type:'auto',
+        resource_type:'image',
       });
       fs.unlink(file,(err)=>
       {

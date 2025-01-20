@@ -33,7 +33,8 @@ const handleImage=async(e)=>
     setError(null);
     setImage(data.image_url);
   } catch (error) {
-    
+    setLoading(false);
+    setError(error);
   }
 }
 const handleSignOut=()=>

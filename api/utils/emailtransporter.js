@@ -27,7 +27,6 @@ export const emailSender = async (toEmail, username) => {
 
     try {
         await transporter.sendMail(mailOptions);
-        console.log(`Login confirmation email sent to ${toEmail}`);
     } catch (err) {
         console.error('Error sending email:', err);
         throw new Error('Failed to send login confirmation email');

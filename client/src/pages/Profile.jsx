@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import {useNavigate} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux'
 import {  signOutSuccess } from '../redux/user/user.Slice';
 import { updateUserFailure,updateUserStart,updateUserSuccess,restart,deleteUserFailure,deleteUserStart,deleteUserSuccess,signOutFailure,signOutStart } from '../redux/user/user.Slice.js';
@@ -134,6 +134,7 @@ const handleDelete=async(e)=>
         <input type='text' placeholder='email' className='border p-3 rounded-lg  '  id='email' value={formData.email?formData.email:currentuser.email } onChange={handleChange}/>
         <input type='password' placeholder='password' className='border p-3 rounded-lg  ' id='password' onChange={handleChange}/>
         <button disabled={loading} className='bg-slate-700 rounded-lg text-white uppercase p-3 hover:opacity-95 disabled:opacity-80'>{loading?'Loading...':'Update'}</button>
+        <Link to={"/create-listing"} className='bg-green-700 rounded-lg text-white uppercase block p-3 text-center hover:opacity-95'>Create Listing</Link>
       </form>
       <div className='flex justify-between my-5'>
         <span className='text-red-500 cursor-pointer' onClick={handleDelete}>Delete Account</span>

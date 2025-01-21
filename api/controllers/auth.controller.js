@@ -123,3 +123,14 @@ export const imgUploader=async(req,res,next)=>
       res.status(500).json({ error: 'Failed to upload image to Cloudinary',success:false });
     }
   } 
+export const signOutHandler=async(req,res,next)=>
+  {
+       try 
+       {
+        res.clearCookie('access_token');
+        res.status(200).json('User has been looged out')
+        
+       } catch (error) {
+        next(error);
+       }
+  }

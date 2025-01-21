@@ -24,11 +24,20 @@ const userSlice=createSlice({
           {
             state.error=null;
           },
+          signOutStart:(state)=>
+          {
+            state.loading=true;
+          },
           signOutSuccess:(state)=>
           {
             state.currentuser=null;
             state.loading=false;
             state.error=null;
+          },
+          signOutFailure:(state,action)=>
+          {
+            state.error=action.payload;
+            state.loading=false;
           },
           updateUserStart:(state)=>
           {
@@ -67,7 +76,7 @@ const userSlice=createSlice({
 })
 export  const 
 {signInFailure,signinStart,signInSuccess,restart,signOutSuccess,updateUserFailure,updateUserSuccess,updateUserStart
-  ,deleteUserFailure,deleteUserStart,deleteUserSuccess
+  ,deleteUserFailure,deleteUserStart,deleteUserSuccess,signOutFailure,signOutStart
 }=userSlice.actions;
 
 export default userSlice.reducer;

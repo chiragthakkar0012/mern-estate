@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import {useNavigate} from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux'
 import {  signOutSuccess } from '../redux/user/user.Slice';
-import { updateUserFailure,updateUserStart,updateUserSuccess,restart,deleteUserFailure,deleteUserStart,deleteUserSuccess } from '../redux/user/user.Slice.js';
+import { updateUserFailure,updateUserStart,updateUserSuccess,restart,deleteUserFailure,deleteUserStart,deleteUserSuccess,signOutFailure,signOutStart } from '../redux/user/user.Slice.js';
 export default function Profile() {
 const {currentuser,loading,error}=useSelector(state=>state.user);
 const [Loading,setLoading]=useState(false);
@@ -41,8 +41,24 @@ const handleImage=async(e)=>
     setError(error);
   }
 }
-const handleSignOut=()=>
+const handleSignOut=async()=>
 {
+    try 
+    {
+        dispatch(signOutStart());
+        const res=await fetch('/api/auth/signout');
+        const data=await res.json();
+        if(data.success===false)
+        {
+          dispatch(signOutFailure(data.message));
+          return;
+        }
+        dispatch(signOutSuccess());
+      
+    } catch (error) 
+    {
+      dispatch(signOutFailure(data.message));
+    }
     dispatch(signOutSuccess());
     navigate('/sign-in')
 }

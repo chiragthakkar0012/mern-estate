@@ -60,7 +60,8 @@ const listingSchema= new mongoose.Schema(
     },
     userRef:
     {
-        type:String,
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'User',
         required:true
     }
 },{timestamps:true});

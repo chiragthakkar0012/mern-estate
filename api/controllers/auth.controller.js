@@ -107,7 +107,6 @@ export const imgUploader=async(req,res,next)=>
           console.log('File deleted successfully');
         }
       })
-      console.log(uploadResponse);
       res.status(200).json(
         {
           message:'Image uploaded successfully',

@@ -198,15 +198,16 @@ const handleShowListings=async(e)=>
             {
               ShowlistingData.map(list=>(
               <div className='border rounded-lg p-3 flex justify-between items-center gap-4' key={list._id} >
-              <Link to={`/listing/${list._id}`}>
+              <Link to={`/listing/${list._id}`} state={list}>
                   <img src={list.imageUrls[0]} className='h-16 w-18 object-contain '/>
                 </Link>
-              <Link  className='text-slate-700 font-semibold hover:underline truncate flex-1' to={`/listing/${list._id}`}>
+              <Link   state={list} className='text-slate-700 font-semibold hover:underline truncate flex-1' to={`/listing/${list._id}`}>
                   <p >{list.name}</p>
                 </Link>
                 <div className='flex flex-col gap-2'>
                    <button  onClick={()=>handleListingDelete(list._id)} className='text-red-500 uppercase' id=''>Delete</button>
-                   <button className='text-green-500 uppercase'>Edit</button>
+                   <Link to={`/create-listing/${list._id}`}><button className='text-green-500 uppercase pl-2'>Edit</button></Link>
+                   
                 </div>
               </div>
             ))   

@@ -61,3 +61,19 @@ export const deleteListing=async(req,res,next)=>
     next(error)
   }
 }
+export const updateListing=async(req,res,next)=>
+{
+  try 
+  {
+    const listing=await Listing.findById(req.params.id);
+    if(!listing) return next(errHandler(401,'Listing Not Found'));
+    if(req.user.id!=listing.userRef) return next(errHandler(401,'You can Update  your own listing Only'))
+    const UpdatedListing=await Listing.findByIdAndUpdate(req.params.id,req.body,{new:true});
+  if (!UpdatedListing) {
+    return next(errHandler(500, 'Failed to update the listing')); // Handle update failure
+  }
+         res.status(201).json(UpdatedListing);
+  } catch (error) {
+    next(error); 
+  }
+}

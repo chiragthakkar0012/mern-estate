@@ -15,6 +15,28 @@ const fileRef=useRef(null);
 const [ShowlistingData,setShowListingData]=useState(null);
 const dispatch=useDispatch();
 const navigate=useNavigate();
+const handleListingDelete=async(id)=>
+{
+  try 
+  {
+     const res=await fetch(`/api/listing/delete/${id}`,
+      {
+        method:'DELETE'
+      }
+     );
+     const data=await res.json();
+     if(data.success===false)
+     {
+      return;
+     }
+     const updatedListings=ShowlistingData.filter(dat=>dat._id!==id);
+     setShowListingData(updatedListings);
+  }
+  catch(error)
+  {
+       setShowListingError(error.message);
+  }
+}
 const handleImage=async(e)=>
 {
   console.log(e.target.files[0]);
@@ -175,7 +197,7 @@ const handleShowListings=async(e)=>
             <h1 className='font-semibold text-center text-2xl text-slate-500 mt-7'>Yours Listings</h1>
             {
               ShowlistingData.map(list=>(
-              <div className='border rounded-lg p-3 flex justify-between items-center gap-4' key={list._id}>
+              <div className='border rounded-lg p-3 flex justify-between items-center gap-4' key={list._id} >
               <Link to={`/listing/${list._id}`}>
                   <img src={list.imageUrls[0]} className='h-16 w-18 object-contain '/>
                 </Link>
@@ -183,7 +205,7 @@ const handleShowListings=async(e)=>
                   <p >{list.name}</p>
                 </Link>
                 <div className='flex flex-col gap-2'>
-                   <button className='text-red-500 uppercase' id=''>Delete</button>
+                   <button  onClick={()=>handleListingDelete(list._id)} className='text-red-500 uppercase' id=''>Delete</button>
                    <button className='text-green-500 uppercase'>Edit</button>
                 </div>
               </div>

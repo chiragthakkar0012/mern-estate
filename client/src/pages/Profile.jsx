@@ -7,10 +7,12 @@ export default function Profile() {
 const {currentuser,loading,error}=useSelector(state=>state.user);
 const [Loading,setLoading]=useState(false);
 const [Error,setError]=useState(null);
+const [ShowListingError,setShowListingError]=useState(null);
 const [image,setImage]=useState('');
 const [formData,setFormData]=useState({});
 const [update,setUpdate]=useState(false);
 const fileRef=useRef(null);
+const [ShowlistingData,setShowListingData]=useState(null);
 const dispatch=useDispatch();
 const navigate=useNavigate();
 const handleImage=async(e)=>
@@ -102,6 +104,10 @@ const handleError=(e)=>
   {
     dispatch(restart())
   }
+  if(ShowListingError)
+  {
+    setShowListingError(null);
+  }
 }
 const handleDelete=async(e)=>
 {
@@ -122,6 +128,22 @@ const handleDelete=async(e)=>
     dispatch(deleteUserFailure(error.message))
   }
 }
+const handleShowListings=async(e)=>
+{
+  try {
+    setShowListingError(null);
+    const res=await fetch(`/api/user/listings/${currentuser._id}`)
+    const data=await res.json();
+    if(data.success===false)
+    {
+      setShowListingError(data.message);
+      return;
+    }
+    setShowListingData(data);
+  } catch (error) {
+    setShowListingError(error.message);
+  }
+}
   return (
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl font-semibold text-center my-7'>Profile </h1>
@@ -136,12 +158,41 @@ const handleDelete=async(e)=>
         <button disabled={loading} className='bg-slate-700 rounded-lg text-white uppercase p-3 hover:opacity-95 disabled:opacity-80'>{loading?'Loading...':'Update'}</button>
         <Link to={"/create-listing"} className='bg-green-700 rounded-lg text-white uppercase block p-3 text-center hover:opacity-95'>Create Listing</Link>
       </form>
-      <div className='flex justify-between my-5'>
+      <div className='flex justify-between  my-5'>
         <span className='text-red-500 cursor-pointer' onClick={handleDelete}>Delete Account</span>
         <span className='text-red-500 cursor-pointer' onClick={handleSignOut}>Sign Out</span>
         </div>
         <p className='text-red-700 my-5'>{error?error:''}</p>
         <p className='text-green-700 my-5'>{update?'Success':''}</p>
+        <button onClick={handleShowListings}  className='text-green-700  w-full'>Show Listings</button>
+        {
+          ShowListingError ? <span className='text-red-500 text-center'>{ShowListingError}</span>:''
+        }
+        
+        {
+          ShowlistingData && ShowlistingData.length>0 && 
+          <div className='flex flex-col gap-4'>
+            <h1 className='font-semibold text-center text-2xl text-slate-500 mt-7'>Yours Listings</h1>
+            {
+              ShowlistingData.map(list=>(
+              <div className='border rounded-lg p-3 flex justify-between items-center gap-4' key={list._id}>
+              <Link to={`/listing/${list._id}`}>
+                  <img src={list.imageUrls[0]} className='h-16 w-18 object-contain '/>
+                </Link>
+              <Link  className='text-slate-700 font-semibold hover:underline truncate flex-1' to={`/listing/${list._id}`}>
+                  <p >{list.name}</p>
+                </Link>
+                <div className='flex flex-col gap-2'>
+                   <button className='text-red-500 uppercase' id=''>Delete</button>
+                   <button className='text-green-500 uppercase'>Edit</button>
+                </div>
+              </div>
+            ))   
+            }
+          </div>
+            
+          
+        }
     </div>
   )
 }

@@ -128,7 +128,7 @@ export default function EditListing()
             }
             setLoading(false);
             console.log(data);
-            navigate(`/profile`)
+            navigate(`/listing/${state._id}`,{state:data});
 
         } catch (error) 
         {  setLoading(false);
@@ -168,7 +168,7 @@ export default function EditListing()
                 <span>Parking spot</span>
             </div>
             <div className='flex gap-2"'>
-                <input type='checkbox' id='furnished' className='w-5 mr-2' onChange={handleFormChange}/>
+                <input type='checkbox' id='furnished' className='w-5 mr-2' checked={listingData.furnished} onChange={handleFormChange}/>
                 <span>Furnished</span>
             </div>
             <div className='flex gap-2"'>

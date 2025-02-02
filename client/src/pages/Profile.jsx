@@ -206,7 +206,7 @@ const handleShowListings=async(e)=>
                 </Link>
                 <div className='flex flex-col gap-2'>
                    <button  onClick={()=>handleListingDelete(list._id)} className='text-red-500 uppercase' id=''>Delete</button>
-                   <Link to={`/create-listing/${list._id}`} state={list}><button className='text-green-500 uppercase pl-2'>Edit</button></Link>
+                   <Link to={`/update-listing/${list._id}`} state={list}><button className='text-green-500 uppercase pl-2'>Edit</button></Link>
                    
                 </div>
               </div>

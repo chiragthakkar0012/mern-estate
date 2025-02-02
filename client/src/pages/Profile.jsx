@@ -154,9 +154,10 @@ const handleShowListings=async(e)=>
 {
   try {
     setShowListingError(null);
+    
     const res=await fetch(`/api/user/listings/${currentuser._id}`)
     const data=await res.json();
-    if(data.success===false)
+    if(data.success==false)
     {
       setShowListingError(data.message);
       return;

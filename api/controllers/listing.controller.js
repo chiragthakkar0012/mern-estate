@@ -83,7 +83,7 @@ export const getListing=async(req,res,next)=>
       try
       {
         const listing=await Listing.findById(req.params.id);
-        if(!listing) return next(errHandler(401,'Listing Not Found'));
+        
         res.status(200).json(listing);
       } catch (error) {
         next(error);

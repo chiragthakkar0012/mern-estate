@@ -117,11 +117,11 @@ export const getListings=async(req,res,next)=>
             type={ $in : ['sale','rent']};
           } 
         const searchTerm=req.query.searchTerm|| '';
+        console.log(searchTerm);
         const sort =req.query.sort || 'createdAt';
         const order=req.query.order || 'desc'; 
         const listings=await Listing.find({
-          name:{$regex:searchTerm,$options:'i'},
-          address:{$regex:searchTerm,$options:'i'},
+          $or:[{name:{$regex:searchTerm,$options:'i'}},{address:{$regex:searchTerm,$options:'i'}}],
           offer,
           furnished,
           parking,

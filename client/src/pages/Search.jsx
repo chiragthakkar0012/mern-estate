@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import ShimmerEffect from '../components/ShimmerEffect';
+import ListingCart from '../components/ListingCart';
 export default function Search() {
     const [loading,setLoading]=useState(false);
     const [listings,setListings]=useState([]);
+    const [showMore,setShowMore]=useState(false)
     const [sideBarData,setsideBarData]=useState({
         searchTerm:'',
         type:'all',
@@ -12,6 +15,22 @@ export default function Search() {
         order:'desc',
         sort:'createdAt'
     })
+    const ShowMoreClick=async(e)=>
+    {
+        const numberOfListing=listings.length;
+        const startIndex=numberOfListing;
+        const urlParams=new URLSearchParams(location.search);
+        urlParams.set('startIndex',startIndex);
+        const searchQuery=urlParams.toString();
+        const res=await fetch(`/api/listing/get?${searchQuery}`);
+        const data=await res.json();
+        if(data.length<9)
+        {
+            setShowMore(false);
+        }
+        setListings({...listings,...data})
+
+    }
     const navigate=useNavigate();
     const handleChange=(e)=>{
         if(e.target.id==='all' || e.target.id==='rent' || e.target.id==='sale')
@@ -71,11 +90,19 @@ export default function Search() {
 
 
         const fetchedListing=async()=>
-        {
+        {  setShowMore(false);
             setLoading(true);
             const searchQuery=urlParams.toString();
             const res=await fetch(`/api/listing/get?${searchQuery}`);
             const data=await res.json();
+            if(data.length>8)
+            {
+                setShowMore(true);
+            }
+            else 
+            {
+                setShowMore(false);
+            }
             setLoading(false);
             setListings(data);
 
@@ -145,6 +172,22 @@ console.log(listings);
         </div>
         <div className=''>
             <h1 className='text-3xl font-semibold border-b p-3  text-slate-700 mt-5'>Listing Results:</h1>
+            <div className='p-7 flex flex-wrap gap-4'>
+                {!loading && listings.length===0 &&
+                (<p className='text-xl text-slate-700 text-center '>No Listing Found </p>)
+                }
+                {
+                    loading && <ShimmerEffect/>
+                }
+                {
+                    !loading && listings && listings.map((listing)=>(
+                        <ListingCart  key={listing._id} listing={listing}/>
+                    ))
+                }
+                {
+                    showMore && (<button onClick={ShowMoreClick} className=' w-full text-green-700 hover:underline p-7'>Show more </button>)
+                }
+            </div>
         </div> 
     </div>
   )

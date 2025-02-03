@@ -100,7 +100,7 @@ export default function CreateListing()
             setFormError('Images are Required To Upload');
             return;
         }
-        if(listingData.regularPrice<listingData.discountPrice)
+        if(listingData.regularPrice>listingData.discountPrice)
         {   setFormError('Discount Price Must be less than Regular price')
             return ;
         }
